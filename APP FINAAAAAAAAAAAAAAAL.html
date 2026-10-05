@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#212121">
+<title>mecena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --pink:#F06292;--pink-d:#EC407A;--blue:#3F51B5;--green:#4DB6AC;--yellow:#FFF176;
+    --yellow-d:#F9A825;--gray-input:#F5F5F5;--gray-card:#E8E8E8;--gray-soft:#EEEEEE;
+    --dark:#212121;--text:#1A1A1A;--text-2:#555;--text-3:#888;
+  }
+  html{height:100%}
+  body{margin:0;min-height:100vh;min-height:100dvh;padding:20px;background:#2A2A2A;
+    font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    color:var(--text);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+    display:flex;align-items:center;justify-content:center}
+  .phone{width:390px;height:844px;background:#fff;border-radius:38px;overflow:hidden;
+    position:relative;box-shadow:0 20px 60px rgba(0,0,0,.7);display:flex;flex-direction:column;flex-shrink:0}
+  @media (max-width: 440px){
+    html{height:100%;height:-webkit-fill-available;height:100dvh}
+    body{padding:0;display:block;background:#fff;overflow:hidden;height:100vh;height:100dvh;min-height:0}
+    .phone{width:100vw;height:100vh;height:100dvh;border-radius:0;box-shadow:none;
+      padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  }
+  .screen{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+  .screen.active{display:flex}
+  .screen.dark{background:var(--dark);color:#fff}
+  .screen.light{background:#fff;color:var(--text)}
+  .content{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 24px 20px}
+  .content::-webkit-scrollbar{width:0}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px 18px;flex:0 0 auto}
+  .topbar .logo-mini{display:flex;align-items:center;gap:10px}
+  .topbar .logo-mini .txt{font-size:18px;font-weight:500;letter-spacing:-.3px;color:var(--text)}
+  .screen.dark .topbar .logo-mini .txt{color:#fff}
+  .hero{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 30px;overflow-y:auto}
+  .hero .logo-big{margin-bottom:24px;flex-shrink:0}
+  .hero .brand{font-size:42px;font-weight:300;letter-spacing:-1.5px;color:#fff;margin-bottom:60px}
+  .hero .links{display:flex;flex-direction:column;gap:14px;margin-bottom:36px;align-items:center}
+  .hero .link{background:none;border:0;color:#fff;font-family:inherit;font-size:15px;font-weight:300;
+    padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.6);cursor:pointer;touch-action:manipulation}
+  .hero .link:active{color:var(--pink);border-bottom-color:var(--pink)}
+  .hero .btn-login{background:var(--pink);color:#fff;border:0;border-radius:14px;padding:14px 48px;
+    font-family:inherit;font-size:15px;font-weight:700;letter-spacing:1.5px;cursor:pointer;touch-action:manipulation}
+  .hero .btn-login:active{background:var(--pink-d)}
+  .form-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px;color:var(--text)}
+  .form-sub{font-size:13px;font-weight:300;color:var(--text-2);margin-bottom:28px}
+  .screen.dark .form-title{color:#fff}
+  .screen.dark .form-sub{color:rgba(255,255,255,.6)}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:14px;font-weight:400;color:var(--text);margin-bottom:8px}
+  .field input,.field textarea,.field select{
+    width:100%;background:var(--gray-input);border:0;border-radius:10px;padding:13px 16px;
+    font-family:inherit;font-size:14px;color:var(--text);outline:none;
+    -webkit-appearance:none;appearance:none;transition:box-shadow .15s}
+  .field textarea{resize:none;height:80px}
+  .field input:focus,.field textarea:focus,.field select:focus{box-shadow:0 0 0 2px rgba(240,98,146,.35)}
+  .field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer}
+  @media (max-width: 440px){.field input,.field textarea,.field select{font-size:16px}}
+  .btn-pink{display:block;width:100%;background:var(--pink);color:#fff;border:0;border-radius:14px;
+    padding:16px;font-family:inherit;font-size:15px;font-weight:700;letter-spacing:1.5px;
+    cursor:pointer;margin-top:12px;transition:background .15s;touch-action:manipulation}
+  .btn-pink:active{background:var(--pink-d)}
+  .link-underline{display:block;background:none;border:0;color:var(--text);font-family:inherit;
+    font-size:13px;text-decoration:underline;text-underline-offset:3px;padding:8px;
+    margin:8px auto 0;cursor:pointer;touch-action:manipulation}
+  .mosaico{flex:0 0 auto;height:70px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(2,1fr);width:100%}
+  .mosaico.lg{height:140px;grid-template-rows:repeat(3,1fr)}
+  .tile{position:relative;overflow:hidden}
+  .t-chk-bp{background-image:
+    linear-gradient(45deg,#3F51B5 25%,transparent 25%),linear-gradient(-45deg,#3F51B5 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#3F51B5 75%),linear-gradient(-45deg,transparent 75%,#3F51B5 75%);
+    background-color:#7986CB;background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0px}
+  .t-chk-gk{background-image:
+    linear-gradient(45deg,#1A1A1A 25%,transparent 25%),linear-gradient(-45deg,#1A1A1A 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#1A1A1A 75%),linear-gradient(-45deg,transparent 75%,#1A1A1A 75%);
+    background-color:#4DB6AC;background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0px}
+  .t-chk-yg{background-image:
+    linear-gradient(45deg,#FFF176 25%,transparent 25%),linear-gradient(-45deg,#FFF176 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#FFF176 75%),linear-gradient(-45deg,transparent 75%,#FFF176 75%);
+    background-color:#4DB6AC;background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0px}
+  .t-sq-y-pink{background:var(--pink)}
+  .t-sq-y-pink::after{content:'';position:absolute;top:50%;left:50%;width:34%;height:34%;background:var(--yellow);transform:translate(-50%,-50%)}
+  .t-circ-p{background:var(--blue)}
+  .t-circ-p::after{content:'';position:absolute;top:50%;left:50%;width:38%;height:38%;background:var(--pink);border-radius:50%;transform:translate(-50%,-50%)}
+  .t-tri-g{background:var(--yellow)}
+  .t-tri-g::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;
+    border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:22px solid var(--green);transform:translate(-50%,-50%)}
+
+  /* ============ PROFILE CARD ============ */
+  .profile-card{background:var(--gray-card);padding:18px 24px 0;margin:0 -24px 22px;position:relative}
+  .profile-edit{position:absolute;top:16px;right:20px;background:none;border:0;cursor:pointer;
+    padding:6px;border-radius:8px;color:#333;touch-action:manipulation}
+  .profile-edit:active{background:rgba(0,0,0,.08)}
+  .profile-edit svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .profile-top{display:flex;gap:14px;align-items:flex-start;padding-right:30px}
+  .profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#7986CB,#4DB6AC);
+    flex:0 0 auto;display:grid;place-items:center;font-size:34px;overflow:hidden}
+  .profile-info{flex:1;min-width:0;padding-top:2px}
+  .profile-info h3{font-size:17px;font-weight:700;margin-bottom:8px}
+  .profile-line{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);margin-bottom:5px}
+  .profile-line svg{width:14px;height:14px;flex:0 0 auto}
+  .profile-desc-wrap{background:#F0F0F0;margin:14px -24px 0;padding:12px 24px;border-top:1px solid #DDD;border-bottom:1px solid #DDD}
+  .profile-desc-title{font-size:13px;font-weight:500;margin-bottom:3px}
+  .profile-desc{font-size:12px;font-weight:300;color:var(--text-2);line-height:1.5}
+  .profile-actions{display:flex;justify-content:space-around;margin:0 -24px;padding:12px 24px 14px;background:var(--gray-card);position:relative}
+  .profile-action{background:none;border:0;cursor:pointer;color:var(--text);border-radius:12px;
+    display:grid;place-items:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+    transition:background .15s,transform .1s;width:52px;height:52px;padding:0;position:relative;z-index:2}
+  .profile-action:active{background:rgba(0,0,0,.1);transform:scale(.9)}
+  .profile-action svg{width:26px;height:26px;stroke:currentColor;fill:none;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;display:block}
+
+  .profile-arrow{
+    position:absolute;bottom:0;
+    width:0;height:0;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-bottom:8px solid #ffffff;
+    transform:translateX(-50%);
+    z-index:10;
+    transition:left .25s ease;
+    pointer-events:none;
+  }
+  .profile-arrow.pos-1{left:17.1%}
+  .profile-arrow.pos-2{left:39.0%}
+  .profile-arrow.pos-3{left:61.0%}
+  .profile-arrow.pos-4{left:82.9%}
+
+  /* ============ SECTION HEADER ============ */
+  .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .section-heading{font-size:20px;font-weight:700;letter-spacing:-.3px;color:var(--text)}
+  .section-trash{background:none;border:0;cursor:pointer;padding:6px;color:#333;border-radius:8px;touch-action:manipulation}
+  .section-trash:active{background:rgba(0,0,0,.06)}
+  .section-trash svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  .btn-plus{display:block;width:100%;background:#E0E0E0;border:0;border-radius:16px;
+    padding:32px 24px;font-size:34px;font-weight:300;color:var(--text);
+    cursor:pointer;font-family:inherit;line-height:1;
+    transition:background .15s;touch-action:manipulation;margin-top:8px}
+  .btn-plus:active{background:#D0D0D0}
+
+  .search{display:flex;align-items:center;gap:10px;background:#F3E5F5;border-radius:14px;padding:12px 18px;margin-bottom:24px}
+  .search svg{width:18px;height:18px;color:#555;flex:0 0 auto}
+  .search input{flex:1;background:transparent;border:0;outline:none;font-family:inherit;
+    font-size:14px;color:var(--text);-webkit-appearance:none;min-width:0}
+  @media (max-width: 440px){.search input{font-size:16px}}
+  .search input::placeholder{color:#777}
+
+  .filter-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .filter-label{font-size:14px;color:var(--text);padding:8px 0;flex:0 0 auto;min-width:70px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+  .chip{background:#E0E0E0;color:var(--text);border:0;border-radius:12px;padding:8px 16px;
+    font-family:inherit;font-size:13px;cursor:pointer;transition:background .15s;white-space:nowrap;touch-action:manipulation}
+  .chip:active{background:#D0D0D0}
+  .chip.pink{background:var(--pink);color:#fff}
+  .chip.green{background:var(--green);color:#fff}
+  .chip.yellow{background:var(--yellow);color:var(--text)}
+  .chip.blue{background:var(--blue);color:#fff}
+  .transporte-row{display:flex;align-items:center;gap:10px;margin:14px 0 6px;flex-wrap:wrap}
+  .transporte-row .filter-label{padding:0}
+
+  .item-card{background:#E0F2F1;border-radius:14px;overflow:hidden;margin-bottom:14px;position:relative}
+  .item-img{width:100%;height:150px;background:linear-gradient(135deg,#F06292 0%,#EC407A 40%,#4DB6AC 100%)}
+  .item-body{padding:14px 16px 16px;background:#E0F2F1;position:relative}
+  .item-title{font-size:18px;font-weight:700;margin-bottom:8px}
+  .item-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .badge{background:#fff;color:var(--text);border-radius:8px;padding:4px 10px;font-size:12px}
+  .badge.beige{background:#F5F0E8}
+  .item-hand{position:absolute;bottom:14px;right:14px;font-size:20px;color:#1A1A1A}
+  .item-footer{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .btn-interesse{background:var(--pink);color:#fff;border:0;border-radius:10px;padding:8px 14px;
+    font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;
+    text-transform:uppercase;touch-action:manipulation}
+  .btn-interesse:active{background:var(--pink-d)}
+
+  /* ============ STATUS PILLS (clicáveis) ============ */
+  .status-pill{
+    padding:5px 12px;border-radius:10px;font-size:10px;font-weight:700;
+    letter-spacing:.5px;border:0;cursor:pointer;font-family:inherit;
+    background:#BDBDBD;color:#333;text-transform:uppercase;
+    transition:background .15s,color .15s;touch-action:manipulation;
+  }
+  .status-pill:active{filter:brightness(.92)}
+  .status-pill.active{background:var(--pink);color:#fff}
+
+  /* ============ PROPOSTAS ============ */
+  .tabs{display:flex;gap:6px;margin-bottom:16px}
+  .tab-btn{flex:1;background:#E0E0E0;color:var(--text);border:0;border-radius:12px;
+    padding:10px 14px;font-family:inherit;font-size:13px;cursor:pointer;
+    touch-action:manipulation;text-align:center;transition:background .15s}
+  .tab-btn.active{background:#BDBDBD;font-weight:600}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  .prop-list{background:var(--gray-soft);border-radius:14px;padding:6px 0;margin-bottom:14px}
+  .prop-item{padding:14px 16px;border-bottom:1px solid #D8D8D8;position:relative}
+  .prop-item:last-child{border-bottom:0}
+  .prop-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .prop-avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;flex:0 0 auto;
+    background:linear-gradient(135deg,#FFB74D,#4DB6AC);display:grid;place-items:center;font-size:20px}
+  .prop-avatar.square{border-radius:10px;background:linear-gradient(135deg,#64B5F6,#0D47A1)}
+  .prop-avatar.foto{background:linear-gradient(135deg,#EC407A,#4DB6AC);border-radius:10px}
+  .prop-name{font-size:16px;font-weight:700;flex:1}
+  .prop-remove{background:none;border:0;cursor:pointer;padding:4px 8px;color:#333;font-size:22px;
+    line-height:1;touch-action:manipulation;font-family:inherit;transition:transform .1s}
+  .prop-remove:active{transform:scale(.88)}
+  .prop-loc{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px;color:#333}
+  .prop-loc svg{width:13px;height:13px}
+  .prop-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .prop-tag{background:#E0E0E0;border-radius:8px;padding:4px 10px;font-size:11px;display:inline-flex;align-items:center;gap:5px}
+  .prop-tag svg{width:12px;height:12px}
+  .prop-tag.plain{background:transparent;padding:0}
+  .prop-status-row{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .prop-date{margin-left:auto;font-size:11px;color:#333}
+
+  /* ============ HISTÓRICO ============ */
+  .hist-list{background:var(--gray-soft);border-radius:14px;padding:6px 0;margin-bottom:14px}
+  .hist-item{padding:14px 16px;border-bottom:1px solid #D8D8D8}
+  .hist-item:last-child{border-bottom:0}
+  .hist-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .hist-avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;flex:0 0 auto;
+    background:linear-gradient(135deg,#F48FB1,#BA68C8);display:grid;place-items:center;font-size:20px}
+  .hist-avatar.square{border-radius:10px;background:linear-gradient(135deg,#64B5F6,#0D47A1)}
+  .hist-name{font-size:16px;font-weight:700;flex:1}
+  .hist-tag{background:#E0E0E0;border-radius:8px;padding:4px 10px;font-size:11px;display:inline-flex;align-items:center;gap:5px}
+  .hist-tag svg{width:12px;height:12px}
+  .hist-date{text-align:right;font-size:11px;color:#333;margin-top:6px}
+
+  .contact-item{display:flex;align-items:center;gap:16px;padding:14px 0}
+  .contact-item svg{width:22px;height:22px;flex:0 0 auto;color:var(--text)}
+  .contact-item span{font-size:16px;font-weight:300}
+
+  /* ============ ENVIADO ============ */
+  .enviado-body{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:40px 34px;text-align:center}
+  .enviado-body h1{font-size:24px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#fff;margin-bottom:16px}
+  .enviado-body p{font-size:16px;font-weight:300;color:rgba(255,255,255,.85);line-height:1.5}
+  .enviado-foot{font-size:12px;font-weight:300;color:rgba(255,255,255,.5);text-align:center;padding:20px}
+
+  /* Botão da tela "Enviado" — vai direto para a home */
+  .btn-enviado-login{
+    display:inline-block;
+    background:var(--pink);
+    color:#fff;
+    border:0;
+    border-radius:14px;
+    padding:14px 60px;
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    cursor:pointer;
+    margin-top:36px;
+    transition:background .15s;
+    touch-action:manipulation;
+  }
+  .btn-enviado-login:active{background:var(--pink-d)}
+
+  .photo-picker{position:relative;width:150px;height:120px;margin:10px auto 20px}
+  .photo-picker .blob{position:absolute;border-radius:14px}
+  .photo-picker .blob.b1{width:70px;height:60px;background:var(--pink);top:0;left:22px;transform:rotate(-3deg)}
+  .photo-picker .blob.b2{width:60px;height:55px;background:#7986CB;top:40px;left:0;transform:rotate(2deg)}
+  .photo-picker .blob.b3{width:55px;height:55px;background:var(--green);top:35px;right:0}
+  .photo-picker .blob.b4{width:45px;height:45px;background:var(--yellow);top:65px;right:14px}
+  .photo-picker .camera{position:absolute;top:18px;left:50%;transform:translateX(-50%);
+    width:72px;height:62px;background:#EDEDED;border-radius:12px;display:grid;place-items:center;
+    color:#1A1A1A;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  .photo-picker .camera svg{width:32px;height:32px}
+  .photo-picker .camera .plus{position:absolute;top:-8px;right:-8px;color:#1A1A1A;font-size:22px;line-height:1}
+
+  .modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);
+    display:none;align-items:center;justify-content:center;z-index:500;padding:20px;
+    opacity:0;transition:opacity .2s}
+  .modal-overlay.show{display:flex;opacity:1}
+  .modal-box{background:#fff;border-radius:20px;width:100%;max-width:350px;
+    max-height:calc(100% - 40px);overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:16px 20px 20px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.35);
+    animation:modalSlideUp .25s ease-out}
+  @keyframes modalSlideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-box::-webkit-scrollbar{width:0}
+  .modal-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .modal-close{width:34px;height:34px;border-radius:50%;background:var(--gray-input);border:0;cursor:pointer;
+    font-size:20px;color:#555;line-height:1;display:grid;place-items:center;font-family:inherit;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex:0 0 auto}
+  .modal-close:active{background:#E0E0E0}
+  .modal-title{font-size:16px;font-weight:700;color:var(--text)}
+
+  .bottom-nav{flex:0 0 auto;background:#fff;border-top:1px solid #E0E0E0;padding:6px 4px;
+    display:flex;justify-content:space-around;align-items:center}
+  @media (max-width: 440px){.bottom-nav{padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))}}
+  .nav-btn{background:none;border:0;width:60px;height:60px;display:grid;place-items:center;
+    cursor:pointer;color:var(--text-3);border-radius:50%;transition:color .15s,transform .1s;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;padding:0}
+  .nav-btn:active{transform:scale(.88)}
+  .nav-btn svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.8;
+    stroke-linecap:round;stroke-linejoin:round;pointer-events:none;display:block}
+  .nav-btn.active-pink{color:var(--pink)}
+  .nav-btn.active-yellow{color:var(--yellow-d)}
+  .nav-btn.active-blue{color:var(--blue)}
+  .nav-btn.active-pink::after,.nav-btn.active-yellow::after,.nav-btn.active-blue::after{
+    content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+    width:5px;height:5px;border-radius:50%}
+  .nav-btn.active-pink::after{background:var(--pink)}
+  .nav-btn.active-yellow::after{background:var(--yellow-d)}
+  .nav-btn.active-blue::after{background:var(--blue)}
+
+  .toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(80px);
+    background:rgba(0,0,0,.88);color:#fff;padding:12px 22px;border-radius:24px;
+    font-size:14px;font-weight:500;z-index:9999;opacity:0;pointer-events:none;
+    transition:all .25s;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .interesse-panel{background:#F5F5F5;border-radius:14px;padding:16px;margin-top:10px}
+  .interesse-panel h4{font-size:14px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+  .interesse-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .interesse-row .lbl{font-size:13px;font-weight:600;color:#333;min-width:80px}
+  .interesse-chips{display:flex;gap:6px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+
+  <!-- ================= INICIAL ================= -->
+  <section class="screen dark active" id="inicial">
+    <div class="hero">
+      <div class="logo-big">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+          <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+          <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+          <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+          <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+        </svg>
+      </div>
+      <div class="brand">mecena</div>
+      <div class="links">
+        <button class="link" data-go="cadastro">Crie seu cadastro</button>
+        <button class="link" data-go="loginRapido">Login rápido</button>
+      </div>
+      <button class="btn-login" data-go="login">LOGIN</button>
+    </div>
+    <div class="mosaico">
+      <div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-chk-gk"></div><div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-chk-yg"></div><div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div>
+      <div class="tile t-tri-g"></div><div class="tile t-chk-gk"></div><div class="tile t-circ-p"></div>
+    </div>
+  </section>
+
+  <!-- ================= LOGIN ================= -->
+  <section class="screen light" id="login">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+    </div></div>
+    <div class="content">
+      <h2 class="form-title">Bem Vindo(a) ao MECENA!</h2>
+      <p class="form-sub">Crie seu cadastro.</p>
+      <div class="field"><label>Nome da Empresa:</label><input type="text"></div>
+      <div class="field"><label>Email:</label><input type="email"></div>
+      <div class="field"><label>Senha:</label><input type="password"></div>
+      <button class="btn-pink" data-go="homeConsumo">ENTRAR</button>
+    </div>
+    <div class="mosaico lg">
+      <div class="tile t-chk-bp"></div><div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-sq-y-pink"></div><div class="tile t-chk-gk"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-chk-yg"></div><div class="tile t-circ-p"></div><div class="tile t-sq-y-pink"></div>
+      <div class="tile t-chk-gk"></div><div class="tile t-sq-y-pink"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-tri-g"></div><div class="tile t-circ-p"></div><div class="tile t-chk-bp"></div>
+    </div>
+  </section>
+
+  <!-- ================= CADASTRO ================= -->
+  <section class="screen light" id="cadastro">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+    </div></div>
+    <div class="content">
+      <h2 class="form-title">Bem Vindo(a) ao MECENA!</h2>
+      <p class="form-sub">Crie seu cadastro.</p>
+      <div class="field"><label>Nome da Empresa:</label><input type="text"></div>
+      <div class="field"><label>Local:</label><input type="text"></div>
+      <div class="field"><label>CNPJ:</label><input type="text"></div>
+      <div class="field"><label>Rótulo de Identificação:</label>
+        <select><option>Descartador</option><option>Consumidor</option><option>Ambos</option></select>
+      </div>
+      <div class="field"><label>Email:</label><input type="email"></div>
+      <div class="field"><label>Telefone:</label><input type="tel"></div>
+      <div class="field"><label>Crie sua Senha:</label><input type="password"></div>
+      <div class="field"><label>Confirme sua senha:</label><input type="password"></div>
+      <div class="field"><label>Descrição de sua Empresa:</label><textarea></textarea></div>
+      <div class="field"><label>Foto de Perfil:</label>
+        <div class="photo-picker">
+          <div class="blob b1"></div><div class="blob b2"></div>
+          <div class="blob b3"></div><div class="blob b4"></div>
+          <div class="camera">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
+            <span class="plus">+</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-pink" data-go="enviado">ENTRAR</button>
+    </div>
+    <div class="mosaico lg">
+      <div class="tile t-chk-gk"></div><div class="tile t-sq-y-pink"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-circ-p"></div><div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-tri-g"></div><div class="tile t-chk-yg"></div><div class="tile t-sq-y-pink"></div>
+      <div class="tile t-chk-bp"></div><div class="tile t-circ-p"></div><div class="tile t-chk-gk"></div>
+      <div class="tile t-circ-p"></div><div class="tile t-chk-gk"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-chk-yg"></div><div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div>
+    </div>
+  </section>
+
+  <!-- ================= LOGIN RÁPIDO ================= -->
+  <section class="screen light" id="loginRapido">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+    </div></div>
+    <div class="content">
+      <h2 class="form-title">Bem Vindo(a) ao MECENA!</h2>
+      <p class="form-sub">Login rápido</p>
+      <div class="field"><label>Nome da Empresa:</label><input type="text"></div>
+      <div class="field"><label>CEP:</label><input type="text"></div>
+      <div class="field"><label>Telefone:</label><input type="tel"></div>
+      <h3 class="form-title" style="font-size:20px;margin-top:24px">DESCARTADORES</h3>
+      <p class="form-sub" style="margin-bottom:14px">O que deseja DESCARTAR?</p>
+      <div class="photo-picker" style="margin-bottom:20px">
+        <div class="blob b1"></div><div class="blob b2"></div>
+        <div class="blob b3"></div><div class="blob b4"></div>
+        <div class="camera">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
+          <span class="plus">+</span>
+        </div>
+      </div>
+      <div class="field"><label>Descrição:</label><textarea></textarea></div>
+      <div class="field"><label>Kg/Unidade:</label><input type="text"></div>
+      <div class="field"><label>Transporte:</label>
+        <select><option></option><option>Envio o Item</option><option>Busque o Item</option></select>
+      </div>
+      <h3 class="form-title" style="font-size:20px;margin-top:24px">CONSUMIDORES</h3>
+      <p class="form-sub" style="margin-bottom:14px">O que deseja BUSCAR?</p>
+      <div class="field"><label>Descrição:</label><textarea></textarea></div>
+      <div class="field"><label>Kg/Unidade:</label><input type="text"></div>
+      <div class="field"><label>Transporte:</label>
+        <select><option></option><option>Busco o Item</option><option>Recebo o Item</option></select>
+      </div>
+      <button class="btn-pink" data-go="enviado">ENVIAR</button>
+      <button class="link-underline" data-go="cadastro">Faça cadastro!</button>
+    </div>
+    <div class="mosaico lg">
+      <div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div><div class="tile t-sq-y-pink"></div>
+      <div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div><div class="tile t-chk-gk"></div>
+      <div class="tile t-chk-gk"></div><div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-circ-p"></div><div class="tile t-chk-gk"></div><div class="tile t-chk-yg"></div>
+    </div>
+  </section>
+
+  <!-- ================= ENVIADO ================= -->
+  <section class="screen dark" id="enviado">
+    <div class="mosaico">
+      <div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div>
+      <div class="tile t-chk-gk"></div><div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-chk-yg"></div><div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div>
+      <div class="tile t-tri-g"></div><div class="tile t-chk-gk"></div><div class="tile t-circ-p"></div>
+    </div>
+    <div class="enviado-body">
+      <h1>ENVIADO COM SUCESSO!</h1>
+      <p>Um de nossos colaboradores entrará em contato logo.</p>
+      <button class="btn-enviado-login" data-go="homeConsumo" type="button">CONTINUAR</button>
+    </div>
+    <div class="enviado-foot">Obrigada por ter escolhido a Mecena. Até a próxima.</div>
+    <div class="mosaico">
+      <div class="tile t-chk-gk"></div><div class="tile t-sq-y-pink"></div><div class="tile t-chk-bp"></div>
+      <div class="tile t-tri-g"></div><div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div>
+      <div class="tile t-circ-p"></div><div class="tile t-chk-yg"></div><div class="tile t-sq-y-pink"></div>
+      <div class="tile t-chk-bp"></div><div class="tile t-tri-g"></div><div class="tile t-chk-gk"></div>
+    </div>
+  </section>
+
+  <!-- ================= HOME CONSUMO ================= -->
+  <section class="screen light" id="homeConsumo">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <div class="profile-card">
+        <button class="profile-edit" data-go="editarPerfil" type="button" aria-label="Editar">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        <div class="profile-top">
+          <div class="profile-avatar">🐱</div>
+          <div class="profile-info">
+            <h3>Empresa XYZ</h3>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Descartador
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Local: 1000 SP
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (11) 9999-9999
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              empresa@gmail.com
+            </div>
+          </div>
+        </div>
+        <div class="profile-desc-wrap">
+          <div class="profile-desc-title">Descrição</div>
+          <p class="profile-desc">dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </div>
+        <div class="profile-actions">
+          <button class="profile-action" data-go="homeConsumo" type="button" aria-label="Seus consumos">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+          </button>
+          <button class="profile-action" data-go="homeDescarte" type="button" aria-label="Seus descartes">
+            <svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+          </button>
+          <button class="profile-action" data-go="propostas" type="button" aria-label="Propostas">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </button>
+          <button class="profile-action" data-go="historico" type="button" aria-label="Histórico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+        </div>
+        <div class="profile-arrow pos-1"></div>
+      </div>
+      <div class="section-head">
+        <h2 class="section-heading">SEUS CONSUMOS</h2>
+        <button class="section-trash" type="button" aria-label="Limpar">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+      <button class="btn-plus" id="btnNovoConsumo" type="button">+</button>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= HOME DESCARTE ================= -->
+  <section class="screen light" id="homeDescarte">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <div class="profile-card">
+        <button class="profile-edit" data-go="editarPerfil" type="button" aria-label="Editar">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        <div class="profile-top">
+          <div class="profile-avatar">🐱</div>
+          <div class="profile-info">
+            <h3>Empresa XYZ</h3>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Descartador
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Local: 1000 SP
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (11) 9999-9999
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              empresa@gmail.com
+            </div>
+          </div>
+        </div>
+        <div class="profile-desc-wrap">
+          <div class="profile-desc-title">Descrição</div>
+          <p class="profile-desc">dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </div>
+        <div class="profile-actions">
+          <button class="profile-action" data-go="homeConsumo" type="button" aria-label="Seus consumos">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+          </button>
+          <button class="profile-action" data-go="homeDescarte" type="button" aria-label="Seus descartes">
+            <svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+          </button>
+          <button class="profile-action" data-go="propostas" type="button" aria-label="Propostas">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </button>
+          <button class="profile-action" data-go="historico" type="button" aria-label="Histórico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+        </div>
+        <div class="profile-arrow pos-2"></div>
+      </div>
+      <div class="section-head">
+        <h2 class="section-heading">SEUS DESCARTES</h2>
+        <button class="section-trash" type="button" aria-label="Limpar">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+      <div style="background:#CFD8DC;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="height:150px;background:linear-gradient(135deg,#64B5F6,#1976D2,#0D47A1)"></div>
+        <div style="background:#E0E0E0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:18px;font-weight:700">Jeans Azul</span>
+          <span style="width:28px;height:28px;background:#1A1A1A;color:#fff;border-radius:6px;display:grid;place-items:center;font-size:14px">✓</span>
+        </div>
+      </div>
+      <div style="background:#D1C4E9;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="height:130px;background:linear-gradient(135deg,#F48FB1,#CE93D8,#80CBC4)"></div>
+        <div style="padding:12px 16px 14px">
+          <div style="font-size:18px;font-weight:700;margin-bottom:8px">Poliéster</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+            <span class="badge beige">Retalhos</span><span class="badge beige">Médio</span><span class="badge beige">Variados</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge beige">Busque o Item</span><span class="badge beige">SP</span><span class="badge beige">CENTRO</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-plus" id="btnNovoDescarte" type="button">+</button>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= CONSUMOS ================= -->
+  <section class="screen light" id="consumos">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <h2 class="section-heading" style="margin-bottom:6px">CONSUMOS</h2>
+      <p style="font-size:13px;font-weight:300;color:var(--text-2);margin-bottom:18px">Aqui você encontra interesses dos usuário consumidores!</p>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar">
+      </div>
+      <div class="filter-row"><span class="filter-label">Tipo:</span>
+        <div class="chips">
+          <button class="chip pink" type="button">Retalhos</button><button class="chip" type="button">Variados</button>
+          <button class="chip" type="button">Poliéster</button><button class="chip" type="button">Jeans</button><button class="chip" type="button">Elastano</button>
+        </div>
+      </div>
+      <div class="filter-row"><span class="filter-label">Kg:</span>
+        <div class="chips">
+          <button class="chip" type="button">1kg</button><button class="chip green" type="button">5kg</button>
+          <button class="chip" type="button">10kg</button><button class="chip" type="button">15kg</button>
+          <button class="chip" type="button">20kg</button><button class="chip" type="button">25kg</button><button class="chip" type="button">30kg</button>
+        </div>
+      </div>
+      <div class="filter-row"><span class="filter-label">Local:</span>
+        <div class="chips">
+          <button class="chip yellow" type="button">SP</button><button class="chip" type="button">ZL</button>
+          <button class="chip" type="button">ZN</button><button class="chip" type="button">ZS</button>
+          <button class="chip" type="button">ZO</button><button class="chip yellow" type="button">CENTRO</button>
+        </div>
+      </div>
+      <div class="transporte-row"><span class="filter-label">Transporte:</span>
+        <button class="chip blue" type="button">Busco o Item</button>
+        <button class="chip" type="button">Recebo o Item</button>
+      </div>
+      <div class="item-card" style="margin-top:18px">
+        <div class="item-img"></div>
+        <div class="item-body">
+          <div class="item-title">Poliamida</div>
+          <div class="item-badges"><span class="badge beige">Retalhos</span><span class="badge beige">Médio</span></div>
+          <div class="item-badges"><span class="badge beige">Busque o Item</span><span class="badge beige">ZL</span></div>
+          <div class="item-footer"><button class="btn-interesse" data-interesse="1" type="button">TENHO INTERESSE</button></div>
+          <span class="item-hand">✋</span>
+        </div>
+      </div>
+      <div class="interesse-panel" id="interesseConsumos" style="display:none">
+        <h4>TENHO INTERESSE</h4>
+        <div class="interesse-row">
+          <span class="lbl">Transporte:</span>
+          <div class="interesse-chips">
+            <button class="chip blue" type="button">Busco o Item</button>
+            <button class="chip" type="button">Recebo o Item</button>
+          </div>
+        </div>
+        <button class="btn-pink" type="button" onclick="fecharInteresse('interesseConsumos')">ADICIONAR</button>
+      </div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= DESCARTES ================= -->
+  <section class="screen light" id="descartes">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <h2 class="section-heading" style="margin-bottom:6px">DESCARTES</h2>
+      <p style="font-size:13px;font-weight:300;color:var(--text-2);margin-bottom:18px">Aqui você encontra itens dos usuários descartadores!</p>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar">
+      </div>
+      <div class="filter-row"><span class="filter-label">Tipo:</span>
+        <div class="chips">
+          <button class="chip" type="button">Retalhos</button><button class="chip pink" type="button">Variados</button>
+          <button class="chip" type="button">Poliéster</button><button class="chip" type="button">Jeans</button><button class="chip" type="button">Elastano</button>
+        </div>
+      </div>
+      <div class="filter-row"><span class="filter-label">Kg:</span>
+        <div class="chips">
+          <button class="chip" type="button">1kg</button><button class="chip" type="button">5kg</button>
+          <button class="chip" type="button">10kg</button><button class="chip" type="button">15kg</button>
+          <button class="chip green" type="button">20kg</button><button class="chip" type="button">25kg</button><button class="chip" type="button">30kg</button>
+        </div>
+      </div>
+      <div class="filter-row"><span class="filter-label">Local:</span>
+        <div class="chips">
+          <button class="chip yellow" type="button">SP</button><button class="chip" type="button">ZL</button>
+          <button class="chip yellow" type="button">ZN</button><button class="chip" type="button">ZS</button>
+          <button class="chip" type="button">ZO</button><button class="chip" type="button">CENTRO</button>
+        </div>
+      </div>
+      <div class="transporte-row"><span class="filter-label">Transporte:</span>
+        <button class="chip blue" type="button">Envio o Item</button>
+        <button class="chip" type="button">Busque o Item</button>
+      </div>
+      <div class="item-card" style="margin-top:18px">
+        <div class="item-img"></div>
+        <div class="item-body">
+          <div class="item-title">Poliamida</div>
+          <div class="item-badges"><span class="badge beige">Retalhos</span><span class="badge beige">Médio</span></div>
+          <div class="item-badges"><span class="badge beige">Busque o Item</span><span class="badge beige">ZL</span></div>
+          <div class="item-footer"><button class="btn-interesse" data-interesse="2" type="button">TENHO INTERESSE</button></div>
+          <span class="item-hand">✋</span>
+        </div>
+      </div>
+      <div class="interesse-panel" id="interesseDescartes" style="display:none">
+        <h4>TENHO INTERESSE</h4>
+        <div class="interesse-row">
+          <span class="lbl">Transporte:</span>
+          <div class="interesse-chips">
+            <button class="chip blue" type="button">Busco o Item</button>
+            <button class="chip" type="button">Recebo o Item</button>
+          </div>
+        </div>
+        <button class="btn-pink" type="button" onclick="fecharInteresse('interesseDescartes')">ADICIONAR</button>
+      </div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= PROPOSTAS ================= -->
+  <section class="screen light" id="propostas">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <div class="profile-card">
+        <button class="profile-edit" data-go="editarPerfil" type="button" aria-label="Editar">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        <div class="profile-top">
+          <div class="profile-avatar">🐱</div>
+          <div class="profile-info">
+            <h3>Empresa XYZ</h3>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Descartador
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Local: 1000 SP
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (11) 9999-9999
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              empresa@gmail.com
+            </div>
+          </div>
+        </div>
+        <div class="profile-desc-wrap">
+          <div class="profile-desc-title">Descrição</div>
+          <p class="profile-desc">dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </div>
+        <div class="profile-actions">
+          <button class="profile-action" data-go="homeConsumo" type="button" aria-label="Seus consumos">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+          </button>
+          <button class="profile-action" data-go="homeDescarte" type="button" aria-label="Seus descartes">
+            <svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+          </button>
+          <button class="profile-action" data-go="propostas" type="button" aria-label="Propostas">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </button>
+          <button class="profile-action" data-go="historico" type="button" aria-label="Histórico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+        </div>
+        <div class="profile-arrow pos-3"></div>
+      </div>
+      <div class="section-head"><h2 class="section-heading">PROPOSTAS</h2></div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="recebidas" type="button">Recebidas</button>
+        <button class="tab-btn" data-tab="enviadas" type="button">Enviadas</button>
+      </div>
+      <div class="tab-panel active" id="tab-recebidas">
+        <div class="prop-list">
+          <div class="prop-item">
+            <div class="prop-head">
+              <div class="prop-avatar square"></div>
+              <div class="prop-name">Jeans Azul</div>
+            </div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-head">
+              <div class="prop-avatar">👩</div>
+              <div class="prop-name">Fulano Carvalho</div>
+              <button class="prop-remove" type="button" aria-label="Remover">×</button>
+            </div>
+            <div class="prop-badges">
+              <span class="prop-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                Recebo o Item
+              </span>
+            </div>
+            <div class="prop-status-row">
+              <button class="status-pill active" type="button">ACEITA</button>
+              <button class="status-pill" type="button">EM ANÁLISE</button>
+              <span class="prop-date">30/09/26</span>
+            </div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-head">
+              <div class="prop-avatar">👩</div>
+              <div class="prop-name">Fulana Santos</div>
+              <button class="prop-remove" type="button" aria-label="Remover">×</button>
+            </div>
+            <div class="prop-loc">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Voluntárias do Centro
+            </div>
+            <div class="prop-badges">
+              <span class="prop-tag plain" style="font-size:12px">2004</span>
+              <span class="prop-tag">SP</span><span class="prop-tag">ZL</span>
+            </div>
+            <div class="prop-badges">
+              <span class="prop-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                Recebo o Item
+              </span>
+            </div>
+            <div class="prop-status-row">
+              <button class="status-pill active" type="button">ACEITA</button>
+              <button class="status-pill" type="button">EM ANÁLISE</button>
+              <span class="prop-date">01/10/26</span>
+            </div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-head">
+              <div class="prop-avatar">👨</div>
+              <div class="prop-name">Ciclano Lima</div>
+              <button class="prop-remove" type="button" aria-label="Remover">×</button>
+            </div>
+            <div class="prop-loc">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Catadores do morro
+            </div>
+            <div class="prop-badges">
+              <span class="prop-tag plain" style="font-size:12px">4053</span>
+              <span class="prop-tag">SP</span><span class="prop-tag">ZS</span>
+            </div>
+            <div class="prop-badges">
+              <span class="prop-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                Busco o Item
+              </span>
+            </div>
+            <div class="prop-status-row">
+              <button class="status-pill active" type="button">ACEITA</button>
+              <button class="status-pill" type="button">EM ANÁLISE</button>
+              <span class="prop-date">02/10/26</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="tab-enviadas">
+        <div class="prop-list">
+          <div class="prop-item">
+            <div class="prop-head">
+              <div class="prop-avatar square"></div>
+              <div class="prop-name">Jeans Azul</div>
+            </div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-head">
+              <div class="prop-avatar foto"></div>
+              <div class="prop-name">Poliamida</div>
+              <button class="prop-remove" type="button" aria-label="Remover">×</button>
+            </div>
+            <div class="prop-badges">
+              <span class="prop-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                Recebo o Item
+              </span>
+            </div>
+            <div class="prop-status-row">
+              <button class="status-pill active" type="button">ACEITA</button>
+              <button class="status-pill" type="button">EM ANÁLISE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= HISTÓRICO ================= -->
+  <section class="screen light" id="historico">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <div class="profile-card">
+        <button class="profile-edit" data-go="editarPerfil" type="button" aria-label="Editar">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        <div class="profile-top">
+          <div class="profile-avatar">🐱</div>
+          <div class="profile-info">
+            <h3>Empresa XYZ</h3>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Descartador
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Local: 1000 SP
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (11) 9999-9999
+            </div>
+            <div class="profile-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              empresa@gmail.com
+            </div>
+          </div>
+        </div>
+        <div class="profile-desc-wrap">
+          <div class="profile-desc-title">Descrição</div>
+          <p class="profile-desc">dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </div>
+        <div class="profile-actions">
+          <button class="profile-action" data-go="homeConsumo" type="button" aria-label="Seus consumos">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+          </button>
+          <button class="profile-action" data-go="homeDescarte" type="button" aria-label="Seus descartes">
+            <svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+          </button>
+          <button class="profile-action" data-go="propostas" type="button" aria-label="Propostas">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </button>
+          <button class="profile-action" data-go="historico" type="button" aria-label="Histórico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+        </div>
+        <div class="profile-arrow pos-4"></div>
+      </div>
+      <div class="section-head"><h2 class="section-heading">HISTÓRICO</h2></div>
+      <div class="hist-list">
+        <div class="hist-item">
+          <div class="hist-head">
+            <div class="hist-avatar square"></div>
+            <div class="hist-name">Jeans Azul</div>
+          </div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-head">
+            <div class="hist-avatar">👩</div>
+            <div class="hist-name">Fulano Carvalho</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="hist-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              Recebo o Item
+            </span>
+          </div>
+          <div class="hist-date">30/09/26</div>
+        </div>
+      </div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= AJUDA ================= -->
+  <section class="screen light" id="ajuda">
+    <div class="topbar"><div class="logo-mini">
+      <svg width="26" height="26" viewBox="0 0 130 130">
+        <rect x="10" y="35" width="60" height="60" fill="#3F51B5"/>
+        <polygon points="40,35 100,35 40,75" fill="#FFF176"/>
+        <rect x="40" y="35" width="60" height="60" fill="#4DB6AC"/>
+        <rect x="40" y="5" width="60" height="60" fill="#F06292"/>
+        <rect x="70" y="35" width="30" height="30" fill="#F06292"/>
+      </svg>
+      <span class="txt">mecena</span>
+    </div></div>
+    <div class="content">
+      <h2 class="section-heading" style="margin-bottom:6px">AJUDA</h2>
+      <p style="font-size:13px;font-weight:300;color:var(--text-2);line-height:1.5;margin-bottom:30px">
+        Caso tenha dúvidas ou tenha problemas com a plataforma, entre em contato conosco!
+      </p>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span>emailmecena@gmail.com</span>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <span>(11) 99999-9999</span>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <span>@mecena</span>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>http/mecenasite.com</span>
+      </div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-go="homeConsumo" data-nav="home" type="button" aria-label="Perfil">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </button>
+      <button class="nav-btn" data-go="consumos" data-nav="consumos" type="button" aria-label="Consumos">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" data-go="descartes" data-nav="descartes" type="button" aria-label="Descartes">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </button>
+      <button class="nav-btn" data-go="ajuda" data-nav="ajuda" type="button" aria-label="Ajuda">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ================= MODAL ================= -->
+  <div class="modal-overlay" id="modalNovoItem">
+    <div class="modal-box">
+      <div class="modal-top">
+        <button class="modal-close" id="modalClose" type="button" aria-label="Fechar">×</button>
+        <span class="modal-title">Novo Item</span>
+      </div>
+      <div class="photo-picker" style="margin:8px auto 18px">
+        <div class="blob b1"></div><div class="blob b2"></div>
+        <div class="blob b3"></div><div class="blob b4"></div>
+        <div class="camera">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
+          <span class="plus">+</span>
+        </div>
+      </div>
+      <div class="field"><label>Novo Item:</label><input type="text" placeholder="Ex: Retalhos de algodão" id="modalItemNome"></div>
+      <div class="field">
+        <label>Tipo do Material:</label>
+        <div class="chips" data-group="material">
+          <button class="chip pink" type="button">Retalhos</button>
+          <button class="chip" type="button">Variados</button>
+          <button class="chip" type="button">Poliéster</button>
+          <button class="chip" type="button">Jeans</button>
+          <button class="chip" type="button">Elastano</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Kg/Unidades:</label>
+        <div class="chips" data-group="kg">
+          <button class="chip" type="button">1kg</button>
+          <button class="chip green" type="button">5kg</button>
+          <button class="chip" type="button">10kg</button>
+          <button class="chip" type="button">15kg</button>
+          <button class="chip" type="button">20kg</button>
+          <button class="chip" type="button">25kg</button>
+          <button class="chip" type="button">30kg</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Transporte:</label>
+        <div class="chips" data-group="transporte">
+          <button class="chip blue" type="button">Busco o Item</button>
+          <button class="chip" type="button">Recebo o Item</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Rótulo:</label>
+        <div style="display:flex;gap:24px;padding-left:4px">
+          <button class="rotulo active" data-rotulo type="button"
+            style="background:none;border:0;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--pink)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px">
+              <path d="M7 11.5V14a4.5 4.5 0 0 0 9 0v-2.5"/>
+              <path d="M9 7.5V11a3 3 0 0 0 6 0V7.5"/>
+              <path d="M5 21h14"/>
+            </svg>
+            DOAÇÃO
+          </button>
+          <button class="rotulo" data-rotulo type="button"
+            style="background:none;border:0;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px">
+              <line x1="12" y1="2" x2="12" y2="22"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            VENDA
+          </button>
+        </div>
+      </div>
+      <button class="btn-pink" id="modalAdicionar" type="button">ADICIONAR</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var NAV_MAP = {
+    'inicial': null, 'login': null, 'cadastro': null, 'loginRapido': null, 'enviado': null,
+    'homeConsumo': {nav:'home', color:'pink'},
+    'homeDescarte': {nav:'home', color:'pink'},
+    'consumos': {nav:'consumos', color:'yellow'},
+    'descartes': {nav:'descartes', color:'blue'},
+    'propostas': {nav:'home', color:'pink'},
+    'historico': {nav:'home', color:'pink'},
+    'ajuda': {nav:'ajuda', color:'pink'}
+  };
+
+  var screenEls = document.querySelectorAll('.screen');
+  var toast = document.getElementById('toast');
+  var toastTimer;
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1800);
+  }
+
+  function go(id){
+    if (id === 'editarPerfil'){ showToast('Editar perfil — em breve'); return; }
+    var el = document.getElementById(id);
+    if (!el){ showToast('Tela "' + id + '" não encontrada'); return; }
+    for (var i = 0; i < screenEls.length; i++){
+      screenEls[i].classList.toggle('active', screenEls[i].id === id);
+    }
+    var map = NAV_MAP[id];
+    var navBtns = document.querySelectorAll('.nav-btn');
+    for (var j = 0; j < navBtns.length; j++){
+      var b = navBtns[j];
+      b.classList.remove('active-pink','active-yellow','active-blue');
+      if (map && b.getAttribute('data-nav') === map.nav) b.classList.add('active-' + map.color);
+    }
+    var content = el.querySelector('.content');
+    if (content) content.scrollTop = 0;
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-go]') : null;
+    if (!t) return;
+    e.preventDefault();
+    go(t.getAttribute('data-go'));
+  }, false);
+
+  document.querySelectorAll('.filter-row .chips').forEach(function(group){
+    group.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        var parent = chip.parentElement;
+        var labelEl = parent.parentElement && parent.parentElement.querySelector('.filter-label');
+        var label = labelEl ? labelEl.textContent : '';
+        var cor = null;
+        if (label.indexOf('Tipo') === 0) cor = 'pink';
+        else if (label.indexOf('Kg') === 0) cor = 'green';
+        else if (label.indexOf('Local') === 0) cor = 'yellow';
+        if (cor){
+          parent.querySelectorAll('.chip').forEach(function(c){
+            c.classList.remove('pink','green','yellow');
+          });
+          chip.classList.add(cor);
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.transporte-row, .interesse-chips').forEach(function(group){
+    group.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        group.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('blue'); });
+        chip.classList.add('blue');
+      });
+    });
+  });
+
+  document.querySelectorAll('.modal-box .chips').forEach(function(group){
+    group.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        var g = group.getAttribute('data-group');
+        var cor = g === 'kg' ? 'green' : (g === 'transporte' ? 'blue' : 'pink');
+        group.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('pink','green','yellow','blue'); });
+        chip.classList.add(cor);
+      });
+    });
+  });
+
+  document.querySelectorAll('.modal-box .rotulo').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      document.querySelectorAll('.modal-box .rotulo').forEach(function(x){
+        x.classList.remove('active');
+        x.style.color = '#1A1A1A';
+      });
+      b.classList.add('active');
+      b.style.color = '#F06292';
+    });
+  });
+
+  document.querySelectorAll('.prop-status-row').forEach(function(row){
+    var pills = row.querySelectorAll('.status-pill');
+    pills.forEach(function(pill){
+      pill.addEventListener('click', function(e){
+        e.stopPropagation();
+        pills.forEach(function(p){ p.classList.remove('active'); });
+        pill.classList.add('active');
+      });
+    });
+  });
+
+  document.querySelectorAll('.prop-remove').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var item = btn.closest('.prop-item');
+      if (!item) return;
+      item.style.transition = 'opacity .2s, transform .2s';
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(-10px)';
+      setTimeout(function(){ item.remove(); }, 200);
+      showToast('Item removido');
+    });
+  });
+
+  document.querySelectorAll('.tabs .tab-btn').forEach(function(t){
+    t.addEventListener('click', function(){
+      var tabId = t.getAttribute('data-tab');
+      document.querySelectorAll('.tabs .tab-btn').forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+      var panel = document.getElementById('tab-' + tabId);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  var modal = document.getElementById('modalNovoItem');
+  var modalClose = document.getElementById('modalClose');
+  var btnNovoConsumo = document.getElementById('btnNovoConsumo');
+  var btnNovoDescarte = document.getElementById('btnNovoDescarte');
+  var modalAdicionar = document.getElementById('modalAdicionar');
+
+  function abrirModal(){ modal.classList.add('show'); }
+  function fecharModal(){ modal.classList.remove('show'); }
+
+  if (btnNovoConsumo) btnNovoConsumo.addEventListener('click', abrirModal);
+  if (btnNovoDescarte) btnNovoDescarte.addEventListener('click', abrirModal);
+  if (modalClose) modalClose.addEventListener('click', fecharModal);
+  if (modal) modal.addEventListener('click', function(e){ if (e.target === modal) fecharModal(); });
+
+  if (modalAdicionar){
+    modalAdicionar.addEventListener('click', function(){
+      var nome = document.getElementById('modalItemNome').value.trim();
+      fecharModal();
+      showToast(nome ? 'Item "' + nome + '" adicionado!' : 'Item adicionado!');
+      document.getElementById('modalItemNome').value = '';
+    });
+  }
+
+  document.querySelectorAll('.btn-interesse').forEach(function(b){
+    b.addEventListener('click', function(){
+      var id = b.getAttribute('data-interesse') === '1' ? 'interesseConsumos' : 'interesseDescartes';
+      var panel = document.getElementById(id);
+      if (!panel) return;
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+      if (panel.style.display === 'block') panel.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+
+  function fecharInteresse(id){
+    var p = document.getElementById(id);
+    if (p) p.style.display = 'none';
+    showToast('Interesse registrado!');
+  }
+  window.fecharInteresse = fecharInteresse;
+
+  go('inicial');
+</script>
+</body>
+</html>
